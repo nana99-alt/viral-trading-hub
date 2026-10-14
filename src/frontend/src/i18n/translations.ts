@@ -9,7 +9,7 @@ export const LANGUAGES = ["en", "id"] as const;
 
 export type Language = (typeof LANGUAGES)[number];
 
-export const DEFAULT_LANGUAGE: Language = "en";
+export const DEFAULT_LANGUAGE: Language = "id";
 
 /** BCP-47 locale used for date/time formatting per interface language. */
 export const LOCALES: Record<Language, string> = {
