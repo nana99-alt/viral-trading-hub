@@ -34550,7 +34550,7 @@ function checkDCE() {
 var clientExports = client.exports;
 const ReactDOM = /* @__PURE__ */ getDefaultExportFromCjs(clientExports);
 const LANGUAGES = ["en", "id"];
-const DEFAULT_LANGUAGE = "en";
+const DEFAULT_LANGUAGE = "id";
 const LOCALES = {
   en: "en-US",
   id: "id-ID"
