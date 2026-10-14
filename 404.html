@@ -13,10 +13,64 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://caffeine.ai/imgs/share-logo.jpeg" />
     <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+    <style>
+      #app-shell {
+        min-height: 100vh;
+        box-sizing: border-box;
+        padding: 32px 20px;
+        background: #111b19;
+        color: #f4f7f3;
+        font-family: Arial, sans-serif;
+      }
+      #app-shell .shell-inner {
+        width: min(1080px, 100%);
+        margin: 0 auto;
+      }
+      #app-shell .shell-label {
+        color: #dcae50;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+      #app-shell h1 {
+        max-width: 720px;
+        margin: 20px 0 12px;
+        font-size: clamp(36px, 7vw, 72px);
+        line-height: 1;
+        letter-spacing: -.05em;
+      }
+      #app-shell p {
+        max-width: 620px;
+        color: #aab8b0;
+        font-size: 17px;
+        line-height: 1.6;
+      }
+      #app-shell .shell-card {
+        margin-top: 36px;
+        padding: 22px;
+        border: 1px solid #30423d;
+        border-radius: 14px;
+        background: #182522;
+      }
+      #app-shell .shell-card strong { color: #dcae50; }
+    </style>
     <script type="module" crossorigin src="./assets/index-BpJQM4Ht.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-BOR8Z0xi.css">
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main id="app-shell" aria-label="Pulse Viral Trading Wire">
+        <div class="shell-inner">
+          <div class="shell-label">Pulse / Viral Trading Wire</div>
+          <h1>What’s moving the market right now.</h1>
+          <p>A ranked, reading-first feed of trading stories going viral across the web.</p>
+          <div class="shell-card"><strong>Loading the live feed…</strong><br />Please wait while the latest stories are prepared.</div>
+        </div>
+      </main>
+      <noscript>
+        <div id="app-shell"><div class="shell-inner"><strong>JavaScript is required to use the live feed.</strong></div></div>
+      </noscript>
+    </div>
   </body>
 </html>
