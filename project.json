@@ -1,0 +1,18 @@
+{
+  "overview": "A viral trading content aggregator that collects trending market stories from public sources and presents them in a clean reading-focused feed, now available in both English and Indonesian.",
+  "features": [
+    "Browse a ranked feed of currently-viral trading stories",
+    "Switch the whole interface between English and Indonesian",
+    "Filter stories by source and time range",
+    "Read full story details with related coverage",
+    "Refresh to pull the latest trending content"
+  ],
+  "category": "news-aggregator",
+  "tags": [
+    "trading",
+    "news",
+    "content-aggregation",
+    "localization"
+  ],
+  "last_updated": "2026-10-14T13:22:40.475Z"
+}

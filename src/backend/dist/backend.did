@@ -1,0 +1,131 @@
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec HttpHeader;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: HttpRequestResult;
+ };
+type Timestamp = int;
+type TimeRange = 
+ record {
+   from: opt Timestamp;
+   to: opt Timestamp;
+ };
+type SourceDescriptor = 
+ record {
+   description: text;
+   name: text;
+   url: text;
+ };
+type Result__1 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type HttpRequestResult = 
+ record {
+   body: blob;
+   headers: vec HttpHeader;
+   status: nat;
+ };
+type HttpHeader = 
+ record {
+   name: text;
+   value: text;
+ };
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type ContentItem = 
+ record {
+   articleUrl: text;
+   body: text;
+   id: ContentId;
+   publishedAt: Timestamp;
+   sourceName: text;
+   sourceUrl: text;
+   summary: text;
+   title: text;
+   topics: vec text;
+   viralityScore: nat;
+ };
+type ContentId = nat;
+type ContentFilter = 
+ record {
+   keyword: opt text;
+   source: opt text;
+   timeRange: opt TimeRange;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+service : {
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result__1);
+  _internet_identity_sign_in_start: () -> (blob);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  execute: (qJson: text) -> (Result) query;
+  getApiDoc: () -> (text) query;
+  getCallerUserRole: () -> (UserRole) query;
+  /// Fetch a single content item by id.
+  getContent: (id: ContentId) -> (opt ContentItem) query;
+  /// Fetch content related to the given item by shared topics.
+  getRelatedContent: (id: ContentId) -> (vec ContentItem) query;
+  isCallerAdmin: () -> (bool) query;
+  /// List the available external content sources.
+  listSources: () -> (vec SourceDescriptor) query;
+  /// List viral content matching the optional filters, sorted by virality
+  /// score descending.
+  listViralContent: (filter: ContentFilter) -> (vec ContentItem) query;
+  /// Pull fresh content from the external sources and persist it.
+  refreshContent: () -> (nat);
+  schema: () -> (text) query;
+  /// Response-normalization callback for HTTP outcalls. The actor owns this
+  /// shared query member; the domain mixin receives it as a parameter.
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+}
