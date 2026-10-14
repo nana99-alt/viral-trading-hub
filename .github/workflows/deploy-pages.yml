@@ -3,19 +3,23 @@ name: Deploy frontend to GitHub Pages
 on:
   push:
     branches: [main]
+    paths:
+      - "src/frontend/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,21 +40,23 @@ jobs:
       - name: Build frontend
         run: pnpm --dir src/frontend build
 
-      - name: Add SPA fallback
+      - name: Prepare SPA fallback
         run: cp src/frontend/dist/index.html src/frontend/dist/404.html
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: src/frontend/dist
+      - name: Publish build to Pages root
+        run: |
+          rm -rf assets favicon.ico index.html 404.html env.json
+          cp -R src/frontend/dist/. ./
+          git restore src/frontend/dist
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Commit and push published site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- assets favicon.ico index.html 404.html env.json
+          if git diff --cached --quiet; then
+            echo "No published site changes to commit."
+          else
+            git commit -m "Deploy frontend to GitHub Pages [skip ci]"
+            git push
+          fi
